@@ -1,0 +1,74 @@
+{
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "<ECS_EXECUTION_ROLE_ARN>",
+  "taskRoleArn": "<ECS_TASK_ROLE_ARN>",
+  "family": "pawprint-backend",
+  "containerDefinitions": [
+    {
+      "name": "backend",
+      "image": "<BACKEND_ECR_IMAGE_URI>",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/pawprint/backend",
+          "awslogs-region": "<AWS_REGION>",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "<RDS_DATABASE_URL_SECRET_ARN>"
+        }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "model-artifacts",
+          "containerPath": "/app/models",
+          "readOnly": true
+        },
+        {
+          "sourceVolume": "report-artifacts",
+          "containerPath": "/app/reports",
+          "readOnly": true
+        }
+      ]
+    }
+  ],
+  "volumes": [
+    {
+      "name": "model-artifacts",
+      "efsVolumeConfiguration": {
+        "fileSystemId": "<EFS_FILE_SYSTEM_ID>",
+        "transitEncryption": "ENABLED",
+        "authorizationConfig": {
+          "accessPointId": "<EFS_MODEL_ARTIFACTS_ACCESS_POINT_ID>",
+          "iam": "ENABLED"
+        }
+      }
+    },
+    {
+      "name": "report-artifacts",
+      "efsVolumeConfiguration": {
+        "fileSystemId": "<EFS_FILE_SYSTEM_ID>",
+        "transitEncryption": "ENABLED",
+        "authorizationConfig": {
+          "accessPointId": "<EFS_REPORT_ARTIFACTS_ACCESS_POINT_ID>",
+          "iam": "ENABLED"
+        }
+      }
+    }
+  ]
+}

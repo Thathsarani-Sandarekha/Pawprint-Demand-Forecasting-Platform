@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "dataset_version": "synthetic-pet-retail-v1",
+  "fictional": true,
+  "data_as_of_date": "2026-11-27",
+  "start_date": "2024-11-28",
+  "end_date": "2026-11-27",
+  "sku_count": 150,
+  "warehouse_count": 3,
+  "sku_warehouse_series": 450,
+  "daily_sales_rows": 328500,
+  "units_sold": 3283439,
+  "stockout_flag_rate": 0.0228,
+  "promotion_day_rate": 0.0681,
+  "open_purchase_orders": 604,
+  "warehouse_snapshot_units": 30078,
+  "warehouse_metrics": [
+    {
+      "warehouse_id": "CA-RIV",
+      "units_sold": 1269193,
+      "stockout_flag_rate": 0.025,
+      "promo_day_rate": 0.0681,
+      "on_hand_units": 10806,
+      "city": "Riverside",
+      "state": "California"
+    },
+    {
+      "warehouse_id": "PA-ALL",
+      "units_sold": 866651,
+      "stockout_flag_rate": 0.02,
+      "promo_day_rate": 0.0681,
+      "on_hand_units": 8793,
+      "city": "Allentown",
+      "state": "Pennsylvania"
+    },
+    {
+      "warehouse_id": "TX-DAL",
+      "units_sold": 1147595,
+      "stockout_flag_rate": 0.0235,
+      "promo_day_rate": 0.0681,
+      "on_hand_units": 10479,
+      "city": "Dallas",
+      "state": "Texas"
+    }
+  ],
+  "issues": [],
+  "note": "Synthetic demonstration data; stockout flag represents ending stock of zero, not observed lost demand."
+}

@@ -1,0 +1,34 @@
+name: Publish application images to ECR (manual)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: aws-publish
+    env:
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      BACKEND_ECR_REPOSITORY: ${{ vars.AWS_BACKEND_ECR_REPOSITORY }}
+      FRONTEND_ECR_REPOSITORY: ${{ vars.AWS_FRONTEND_ECR_REPOSITORY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_PUBLISH_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: ecr
+      - name: Build and push commit-tagged images
+        env:
+          REGISTRY: ${{ steps.ecr.outputs.registry }}
+        run: |
+          set -eu
+          test -n "$BACKEND_ECR_REPOSITORY" && test -n "$FRONTEND_ECR_REPOSITORY"
+          BACKEND="$REGISTRY/$BACKEND_ECR_REPOSITORY:$GITHUB_SHA"
+          FRONTEND="$REGISTRY/$FRONTEND_ECR_REPOSITORY:$GITHUB_SHA"
+          docker build -f backend/Dockerfile -t "$BACKEND" .
+          docker build --build-arg NEXT_PUBLIC_API_BASE_URL= -t "$FRONTEND" frontend
+          docker push "$BACKEND"
+          docker push "$FRONTEND"

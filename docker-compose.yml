@@ -1,0 +1,68 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pet_forecast
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_dev_only_change_me}
+      POSTGRES_DB: pet_forecast
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - pet_forecast_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pet_forecast -d pet_forecast"]
+      interval: 5s
+      timeout: 3s
+      retries: 15
+  backend:
+    profiles: [app]
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      APP_ENV: development
+      DATABASE_URL: ${DOCKER_DATABASE_URL:-postgresql+psycopg://pet_forecast:local_dev_only_change_me@postgres:5432/pet_forecast}
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./data:/app/data:ro
+      - ./models:/app/models:ro
+      - ./reports:/app/reports:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=3)"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  frontend:
+    profiles: [app]
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://127.0.0.1:8000
+    environment:
+      API_BASE_URL: http://backend:8000
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+  training:
+    profiles: [batch]
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DATABASE_URL: ${DOCKER_DATABASE_URL:-postgresql+psycopg://pet_forecast:local_dev_only_change_me@postgres:5432/pet_forecast}
+    volumes:
+      - ./data:/app/data:ro
+      - ./artifacts:/app/artifacts
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["python", "-m", "app.mlops.pipeline", "--track"]
+volumes:
+  pet_forecast_pgdata:

@@ -1,0 +1,38 @@
+{
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "<ECS_EXECUTION_ROLE_ARN>",
+  "taskRoleArn": "<ECS_TASK_ROLE_ARN>",
+  "family": "pawprint-frontend",
+  "containerDefinitions": [
+    {
+      "name": "frontend",
+      "image": "<FRONTEND_ECR_IMAGE_URI>",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/pawprint/frontend",
+          "awslogs-region": "<AWS_REGION>",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "API_BASE_URL",
+          "value": "<PRIVATE_BACKEND_SERVICE_URL>"
+        }
+      ]
+    }
+  ]
+}

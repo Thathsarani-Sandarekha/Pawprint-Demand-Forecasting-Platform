@@ -1,0 +1,58 @@
+{
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "2048",
+  "memory": "4096",
+  "executionRoleArn": "<ECS_EXECUTION_ROLE_ARN>",
+  "taskRoleArn": "<ECS_TASK_ROLE_ARN>",
+  "family": "pawprint-batch-training",
+  "containerDefinitions": [
+    {
+      "name": "batch-training",
+      "image": "<BACKEND_ECR_IMAGE_URI>",
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/pawprint/batch-training",
+          "awslogs-region": "<AWS_REGION>",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "secrets": [
+        {
+          "name": "DATABASE_URL",
+          "valueFrom": "<RDS_DATABASE_URL_SECRET_ARN>"
+        }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "candidate-artifacts",
+          "containerPath": "/app/artifacts",
+          "readOnly": false
+        }
+      ],
+      "command": [
+        "python",
+        "-m",
+        "app.mlops.pipeline",
+        "--track"
+      ]
+    }
+  ],
+  "volumes": [
+    {
+      "name": "candidate-artifacts",
+      "efsVolumeConfiguration": {
+        "fileSystemId": "<EFS_FILE_SYSTEM_ID>",
+        "transitEncryption": "ENABLED",
+        "authorizationConfig": {
+          "accessPointId": "<EFS_CANDIDATE_ARTIFACTS_ACCESS_POINT_ID>",
+          "iam": "ENABLED"
+        }
+      }
+    }
+  ]
+}

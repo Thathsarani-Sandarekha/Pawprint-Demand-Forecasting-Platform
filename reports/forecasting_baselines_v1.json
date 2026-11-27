@@ -1,0 +1,203 @@
+{
+  "status": "ready",
+  "phase": "3A",
+  "synthetic_data": true,
+  "model_type": "baseline_only",
+  "source": "postgresql",
+  "dataset_version": "synthetic-pet-retail-v1",
+  "source_sha256": "4850b28ad0dc001d361f97d8454f4301e04023adaca04176d4d4704de01dab37",
+  "forecast_granularity": "SKU-warehouse-day",
+  "horizon_days": 28,
+  "rolling_fold_count": 4,
+  "sku_warehouse_series": 450,
+  "history_start": "2024-11-28",
+  "history_end": "2026-11-27",
+  "future": {
+    "cutoff": "2026-11-27",
+    "forecast_start": "2026-11-28",
+    "forecast_end": "2026-12-25"
+  },
+  "methodology": {
+    "forecast_target": "Observed unit sales; may be censored by stockouts, not latent customer demand",
+    "split": "Chronological, expanding-origin folds to select baseline, then one untouched final horizon for test",
+    "feature_availability": "Baseline uses only sales before each forecast cutoff; no future observed sales, stock, or latent-demand columns",
+    "seasonal_naive_7": "Repeat the last 7 observed sales days for each future week",
+    "moving_average_28": "Repeat the average of the last 28 observed sales days",
+    "wape_pct": "100*sum(abs(actual-predicted))/sum(actual); undefined if demand sum is zero",
+    "mase": "Unweighted mean per-series MAE divided by training-only seasonal naive MAE (7-day); zero-scale series excluded",
+    "bias_pct": "100*sum(predicted-actual)/sum(actual), positive indicates overforecast",
+    "nonstockout_metric": "Extra WAPE excludes days with zero ending stock, which are potential demand-censoring days",
+    "prediction_intervals": "Not implemented yet: no interval coverage claims",
+    "interpretation": "Measured on fictional synthetic observed sales, not real pet-retail business performance"
+  },
+  "rolling_folds": [
+    {
+      "fold": 1,
+      "train_through": "2026-07-10",
+      "validation_start": "2026-07-11",
+      "validation_end": "2026-08-07",
+      "metrics": {
+        "seasonal_naive_7": {
+          "observations": 12600,
+          "wape_pct": 41.4034,
+          "bias_pct": -1.7193,
+          "mae_units": 3.8071,
+          "mase": 0.9083,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 40.6365
+        },
+        "moving_average_28": {
+          "observations": 12600,
+          "wape_pct": 30.4028,
+          "bias_pct": -0.7414,
+          "mae_units": 2.7956,
+          "mase": 0.6662,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 29.573
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "train_through": "2026-08-07",
+      "validation_start": "2026-08-08",
+      "validation_end": "2026-09-04",
+      "metrics": {
+        "seasonal_naive_7": {
+          "observations": 12600,
+          "wape_pct": 40.9799,
+          "bias_pct": -3.7963,
+          "mae_units": 3.9452,
+          "mase": 0.9485,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 40.1723
+        },
+        "moving_average_28": {
+          "observations": 12600,
+          "wape_pct": 29.6798,
+          "bias_pct": -4.4855,
+          "mae_units": 2.8573,
+          "mase": 0.6917,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 28.9382
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "train_through": "2026-09-04",
+      "validation_start": "2026-09-05",
+      "validation_end": "2026-10-02",
+      "metrics": {
+        "seasonal_naive_7": {
+          "observations": 12600,
+          "wape_pct": 40.5327,
+          "bias_pct": -4.1025,
+          "mae_units": 4.0813,
+          "mase": 0.9747,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 38.8753
+        },
+        "moving_average_28": {
+          "observations": 12600,
+          "wape_pct": 30.3093,
+          "bias_pct": -4.3918,
+          "mae_units": 3.0519,
+          "mase": 0.7314,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 28.6369
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "train_through": "2026-10-02",
+      "validation_start": "2026-10-03",
+      "validation_end": "2026-10-30",
+      "metrics": {
+        "seasonal_naive_7": {
+          "observations": 12600,
+          "wape_pct": 40.958,
+          "bias_pct": -2.9568,
+          "mae_units": 4.3338,
+          "mase": 1.0287,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 38.889
+        },
+        "moving_average_28": {
+          "observations": 12600,
+          "wape_pct": 30.0448,
+          "bias_pct": -4.8372,
+          "mae_units": 3.1791,
+          "mase": 0.7564,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 28.0604
+        }
+      }
+    }
+  ],
+  "backtest_summary": {
+    "seasonal_naive_7": {
+      "wape_pct": 40.9586,
+      "bias_pct": -3.1655,
+      "observations": 50400
+    },
+    "moving_average_28": {
+      "wape_pct": 30.1066,
+      "bias_pct": -3.6837,
+      "observations": 50400
+    }
+  },
+  "selected_baseline": "moving_average_28",
+  "untouched_test": {
+    "train_through": "2026-10-30",
+    "test_start": "2026-10-31",
+    "test_end": "2026-11-27",
+    "metrics": {
+      "seasonal_naive_7": {
+        "observations": 12600,
+        "wape_pct": 41.8226,
+        "bias_pct": -8.8814,
+        "mae_units": 4.9833,
+        "mase": 1.183,
+        "mase_valid_series": 450,
+        "wape_nonstockout_pct": 37.7211
+      },
+      "moving_average_28": {
+        "observations": 12600,
+        "wape_pct": 31.9494,
+        "bias_pct": -11.198,
+        "mae_units": 3.8069,
+        "mase": 0.9025,
+        "mase_valid_series": 450,
+        "wape_nonstockout_pct": 28.0863
+      }
+    },
+    "selected_by_warehouse": {
+      "CA-RIV": {
+        "observations": 4200,
+        "wape_pct": 30.8535,
+        "bias_pct": -10.3691,
+        "mae_units": 4.233,
+        "mase": 0.9047,
+        "mase_valid_series": 150
+      },
+      "PA-ALL": {
+        "observations": 4200,
+        "wape_pct": 34.6392,
+        "bias_pct": -11.904,
+        "mae_units": 3.2812,
+        "mase": 0.899,
+        "mase_valid_series": 150
+      },
+      "TX-DAL": {
+        "observations": 4200,
+        "wape_pct": 31.1173,
+        "bias_pct": -11.5711,
+        "mae_units": 3.9064,
+        "mase": 0.9038,
+        "mase_valid_series": 150
+      }
+    }
+  }
+}

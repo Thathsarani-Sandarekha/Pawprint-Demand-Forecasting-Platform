@@ -1,0 +1,53 @@
+name: Code quality and tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend tests (Python 3.11)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - name: Install backend dependencies
+        run: python -m pip install -r backend/requirements.txt
+      - name: Compile backend modules
+        working-directory: backend
+        run: python -m compileall -q app
+      - name: Run backend tests using temporary synthetic fixtures
+        working-directory: backend
+        env:
+          DATABASE_URL: ''
+        run: python -m pytest tests -q
+
+  frontend:
+    name: Next.js build (Node.js 22)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install --no-audit --no-fund
+      - name: Build frontend
+        working-directory: frontend
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: npm run build
+
+  containers:
+    name: Docker image build checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f backend/Dockerfile -t pawprint-api:ci .
+      - run: docker build -t pawprint-web:ci frontend
+      - run: docker compose --profile app --profile batch config --quiet

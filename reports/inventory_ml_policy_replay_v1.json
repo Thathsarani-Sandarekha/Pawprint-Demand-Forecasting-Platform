@@ -1,0 +1,86 @@
+{
+  "status": "ready",
+  "phase": "4C",
+  "fictional": true,
+  "source": "postgresql",
+  "dataset_version": "synthetic-pet-retail-v1",
+  "dataset_sha256": "4850b28ad0dc001d361f97d8454f4301e04023adaca04176d4d4704de01dab37",
+  "evaluation_start": "2026-10-31",
+  "evaluation_end": "2026-11-27",
+  "model_fit_through": "2026-10-30",
+  "trained_model": "LightGBM historical-origin fit, not current production artifact",
+  "model_training_config": {
+    "max_training_days": 365,
+    "estimators": 140,
+    "seed": 42
+  },
+  "policy_comparison": {
+    "simple_moving_average": {
+      "observed_demand_units": 150134,
+      "units_filled": 129352.0,
+      "unmet_observed_units": 20782.0,
+      "shortage_days": 1517,
+      "holding_cost_usd": 7472.04,
+      "inventory_days": 782221.0,
+      "orders_placed": 1487,
+      "units_ordered": 154926,
+      "fill_rate_pct": 86.16,
+      "stockout_day_pct": 12.04,
+      "average_ending_stock_units_per_series": 62.08,
+      "series_count": 450,
+      "replay_days_per_series": 28
+    },
+    "buffered_moving_average": {
+      "observed_demand_units": 150134,
+      "units_filled": 131526.0,
+      "unmet_observed_units": 18608.0,
+      "shortage_days": 1279,
+      "holding_cost_usd": 8922.18,
+      "inventory_days": 940107.0,
+      "orders_placed": 1542,
+      "units_ordered": 167424,
+      "fill_rate_pct": 87.61,
+      "stockout_day_pct": 10.15,
+      "average_ending_stock_units_per_series": 74.61,
+      "series_count": 450,
+      "replay_days_per_series": 28
+    },
+    "lightgbm_buffered": {
+      "observed_demand_units": 150134,
+      "units_filled": 132234.0,
+      "unmet_observed_units": 17900.0,
+      "shortage_days": 1198,
+      "holding_cost_usd": 10248.94,
+      "inventory_days": 1082327.0,
+      "orders_placed": 1544,
+      "units_ordered": 171426,
+      "fill_rate_pct": 88.08,
+      "stockout_day_pct": 9.51,
+      "average_ending_stock_units_per_series": 85.9,
+      "series_count": 450,
+      "replay_days_per_series": 28
+    }
+  },
+  "assumptions": {
+    "replay_history_days": 28,
+    "evaluation_days": 28,
+    "review_every_days": 7,
+    "carrying_rate_annual_pct": 20,
+    "ml_ordering": "Frozen pre-holdout trained model; fresh recursive forecasts after each weekly review using observed history to date",
+    "ml_buffer": "Same trailing-observed-sales volatility heuristic as buffered moving average",
+    "lead_time": "fixed supplier lead times, order placed after review day, arrival at start of day + lead",
+    "starting_inventory": "Same historical opening stock for all policies",
+    "incoming_orders": "Only newly simulated orders; historical POs/receipts excluded",
+    "target": "Observed sales rather than latent demand"
+  },
+  "limitations": [
+    "Synthetic observed sales are stockout-censored: fill rates are NOT actual customer service levels.",
+    "Replay period previously used for forecast evaluation; this is a retrospective diagnostic, NOT a fresh untouched benchmark.",
+    "Model hyperparameters/model family were previously reviewed; do not claim blind independent policy validation.",
+    "Promotions assumed announced before forecast origins; dataset has no announcement timestamps.",
+    "Review-day model updates use historical observed sales even if a simulated stockout would have changed observed purchases: this is not a fully closed-loop counterfactual.",
+    "Historical receipts, initial on-order inventory, perishability, storage limits, supply uncertainty and expiry loss excluded.",
+    "Holding cost uses illustrative 20% annual carrying rate; not measured business costs.",
+    "All policies share the same beginning inventory, lead times, MOQ, pack-size and replay observed sales."
+  ]
+}

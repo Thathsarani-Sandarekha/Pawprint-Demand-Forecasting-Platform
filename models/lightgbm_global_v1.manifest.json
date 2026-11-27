@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "run_id": "caea06375094bcf9",
+  "registered_at_utc": "2026-11-27T08:09:19.549520+00:00",
+  "fictional": true,
+  "purpose": "Local artifact traceability; not a production model registry",
+  "lineage": {
+    "model_version": "lightgbm-global-v1",
+    "selected_model": "lightgbm_global",
+    "dataset_version": "synthetic-pet-retail-v1",
+    "dataset_sha256": "4850b28ad0dc001d361f97d8454f4301e04023adaca04176d4d4704de01dab37",
+    "data_source": "postgresql",
+    "trained_through": "2026-11-27",
+    "training_config": {
+      "horizon": 28,
+      "folds": 4,
+      "max_training_days": 365,
+      "estimators": 140,
+      "learning_rate": 0.065,
+      "leaves": 31,
+      "seed": 42,
+      "min_history_days": 120
+    },
+    "features": [
+      "lag_1",
+      "lag_7",
+      "lag_14",
+      "lag_28",
+      "lag_56",
+      "mean_7",
+      "mean_28",
+      "mean_56",
+      "day_of_week",
+      "month",
+      "day_of_year_sin",
+      "day_of_year_cos",
+      "is_weekend",
+      "promo_discount",
+      "sku_code",
+      "warehouse_code",
+      "category_code",
+      "repeat_purchase",
+      "product_unit_price"
+    ]
+  },
+  "environment": {
+    "python": "3.11.15",
+    "lightgbm": "4.7.0",
+    "numpy": "2.4.4",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0",
+    "joblib": "1.5.3"
+  },
+  "artifacts": {
+    "report": {
+      "filename": "forecasting_ml_v1.json",
+      "sha256": "1dd0ea35a34a9a27b080ae44a78da724caaea41df166f8926e74e1a52890d41d",
+      "bytes": 10932
+    },
+    "preview": {
+      "filename": "forecasting_ml_preview_v1.csv",
+      "sha256": "e5434c824cd415c4aabc5a245c077e91035cd083ad9dee82ae8f02fe89a12ccd",
+      "bytes": 713978
+    },
+    "model": {
+      "filename": "lightgbm_global_v1.joblib",
+      "sha256": "ae6e98423dd130e9567fa192147f6c14fea0cc9ab4c699b08669bc0dbb085a95",
+      "bytes": 408309
+    }
+  }
+}

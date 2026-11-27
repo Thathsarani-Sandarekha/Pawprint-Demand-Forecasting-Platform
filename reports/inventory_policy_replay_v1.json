@@ -1,0 +1,62 @@
+{
+  "status": "ready",
+  "phase": "4B",
+  "fictional": true,
+  "source": "postgresql",
+  "dataset_version": "synthetic-pet-retail-v1",
+  "dataset_sha256": "4850b28ad0dc001d361f97d8454f4301e04023adaca04176d4d4704de01dab37",
+  "evaluation_start": "2026-10-31",
+  "evaluation_end": "2026-11-27",
+  "policy_comparison": {
+    "simple_moving_average": {
+      "observed_demand_units": 150134,
+      "units_filled": 129352.0,
+      "unmet_observed_units": 20782.0,
+      "shortage_days": 1517,
+      "holding_cost_usd": 7472.04,
+      "inventory_days": 782221.0,
+      "orders_placed": 1487,
+      "units_ordered": 154926,
+      "fill_rate_pct": 86.16,
+      "stockout_day_pct": 12.04,
+      "average_ending_stock_units_per_series": 62.08,
+      "series_count": 450,
+      "replay_days_per_series": 28
+    },
+    "buffered_moving_average": {
+      "observed_demand_units": 150134,
+      "units_filled": 131526.0,
+      "unmet_observed_units": 18608.0,
+      "shortage_days": 1279,
+      "holding_cost_usd": 8922.18,
+      "inventory_days": 940107.0,
+      "orders_placed": 1542,
+      "units_ordered": 167424,
+      "fill_rate_pct": 87.61,
+      "stockout_day_pct": 10.15,
+      "average_ending_stock_units_per_series": 74.61,
+      "series_count": 450,
+      "replay_days_per_series": 28
+    }
+  },
+  "assumptions": {
+    "replay_history_days": 28,
+    "evaluation_days": 28,
+    "review_every_days": 7,
+    "carrying_rate_annual_pct": 20,
+    "lead_time": "fixed supplier lead time",
+    "buffered_policy": "28-day observed-sales mean + 1.28 * trailing daily population std * sqrt(lead+review days)",
+    "simple_policy": "28-day observed-sales mean with no buffer",
+    "starting_inventory": "historical opening stock on evaluation start; same for both policies",
+    "incoming_orders": "new simulated orders only; historical supplier receipts and prior POs excluded",
+    "orders": "placed at end of review day; arrivals at start of day after fixed lead",
+    "simulation_target": "observed sales (not latent customer demand)"
+  },
+  "limitations": [
+    "Observed historical sales are stockout-censored: simulated fill rates are NOT true customer service levels.",
+    "This is a retrospective moving-average inventory-policy replay, NOT a LightGBM-driven policy evaluation.",
+    "No historical receipts, existing purchase orders at origin, perishability, or lead-time uncertainty are modeled.",
+    "Holding costs assume an illustrative 20% annual rate; they are not measured operating costs.",
+    "The same historical period has been examined during forecasting; this is a diagnostic replay, not a newly untouched holdout."
+  ]
+}

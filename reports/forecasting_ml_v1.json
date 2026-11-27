@@ -1,0 +1,362 @@
+{
+  "status": "ready",
+  "phase": "3C",
+  "synthetic_data": true,
+  "model_type": "trained_ml_comparison",
+  "dataset_version": "synthetic-pet-retail-v1",
+  "source": "postgresql",
+  "source_sha256": "4850b28ad0dc001d361f97d8454f4301e04023adaca04176d4d4704de01dab37",
+  "forecast_granularity": "SKU-warehouse-day",
+  "horizon_days": 28,
+  "rolling_fold_count": 4,
+  "sku_warehouse_series": 450,
+  "history_start": "2024-11-28",
+  "history_end": "2026-11-27",
+  "selected_model": "lightgbm_global",
+  "selected_by": "Lowest aggregate WAPE across rolling validation folds; never the final holdout",
+  "model_version": "lightgbm-global-v1",
+  "config": {
+    "horizon": 28,
+    "folds": 4,
+    "max_training_days": 365,
+    "estimators": 140,
+    "learning_rate": 0.065,
+    "leaves": 31,
+    "seed": 42,
+    "min_history_days": 120
+  },
+  "features": [
+    "lag_1",
+    "lag_7",
+    "lag_14",
+    "lag_28",
+    "lag_56",
+    "mean_7",
+    "mean_28",
+    "mean_56",
+    "day_of_week",
+    "month",
+    "day_of_year_sin",
+    "day_of_year_cos",
+    "is_weekend",
+    "promo_discount",
+    "sku_code",
+    "warehouse_code",
+    "category_code",
+    "repeat_purchase",
+    "product_unit_price"
+  ],
+  "feature_importance": {
+    "lag_1": 561,
+    "lag_7": 199,
+    "lag_14": 210,
+    "lag_28": 357,
+    "lag_56": 354,
+    "mean_7": 330,
+    "mean_28": 175,
+    "mean_56": 431,
+    "day_of_week": 211,
+    "month": 187,
+    "day_of_year_sin": 295,
+    "day_of_year_cos": 185,
+    "is_weekend": 0,
+    "promo_discount": 312,
+    "sku_code": 186,
+    "warehouse_code": 32,
+    "category_code": 27,
+    "repeat_purchase": 0,
+    "product_unit_price": 141
+  },
+  "rolling_folds": [
+    {
+      "fold": 1,
+      "train_through": "2026-07-10",
+      "validation_start": "2026-07-11",
+      "validation_end": "2026-08-07",
+      "metrics": {
+        "seasonal_naive_7": {
+          "observations": 12600,
+          "wape_pct": 41.4034,
+          "bias_pct": -1.7193,
+          "mae_units": 3.8071,
+          "mase": 0.9083,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 40.6365
+        },
+        "moving_average_28": {
+          "observations": 12600,
+          "wape_pct": 30.4028,
+          "bias_pct": -0.7414,
+          "mae_units": 2.7956,
+          "mase": 0.6662,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 29.573
+        },
+        "lightgbm_global": {
+          "observations": 12600,
+          "wape_pct": 29.5904,
+          "bias_pct": 0.6336,
+          "mae_units": 2.7209,
+          "mase": 0.6564,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 28.7571
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "train_through": "2026-08-07",
+      "validation_start": "2026-08-08",
+      "validation_end": "2026-09-04",
+      "metrics": {
+        "seasonal_naive_7": {
+          "observations": 12600,
+          "wape_pct": 40.9799,
+          "bias_pct": -3.7963,
+          "mae_units": 3.9452,
+          "mase": 0.9485,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 40.1723
+        },
+        "moving_average_28": {
+          "observations": 12600,
+          "wape_pct": 29.6798,
+          "bias_pct": -4.4855,
+          "mae_units": 2.8573,
+          "mase": 0.6917,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 28.9382
+        },
+        "lightgbm_global": {
+          "observations": 12600,
+          "wape_pct": 28.8763,
+          "bias_pct": -0.7526,
+          "mae_units": 2.7799,
+          "mase": 0.678,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 28.0965
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "train_through": "2026-09-04",
+      "validation_start": "2026-09-05",
+      "validation_end": "2026-10-02",
+      "metrics": {
+        "seasonal_naive_7": {
+          "observations": 12600,
+          "wape_pct": 40.5327,
+          "bias_pct": -4.1025,
+          "mae_units": 4.0813,
+          "mase": 0.9747,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 38.8753
+        },
+        "moving_average_28": {
+          "observations": 12600,
+          "wape_pct": 30.3093,
+          "bias_pct": -4.3918,
+          "mae_units": 3.0519,
+          "mase": 0.7314,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 28.6369
+        },
+        "lightgbm_global": {
+          "observations": 12600,
+          "wape_pct": 29.2458,
+          "bias_pct": 0.2519,
+          "mae_units": 2.9448,
+          "mase": 0.7128,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 27.4396
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "train_through": "2026-10-02",
+      "validation_start": "2026-10-03",
+      "validation_end": "2026-10-30",
+      "metrics": {
+        "seasonal_naive_7": {
+          "observations": 12600,
+          "wape_pct": 40.958,
+          "bias_pct": -2.9568,
+          "mae_units": 4.3338,
+          "mase": 1.0287,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 38.889
+        },
+        "moving_average_28": {
+          "observations": 12600,
+          "wape_pct": 30.0448,
+          "bias_pct": -4.8372,
+          "mae_units": 3.1791,
+          "mase": 0.7564,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 28.0604
+        },
+        "lightgbm_global": {
+          "observations": 12600,
+          "wape_pct": 28.7747,
+          "bias_pct": 0.6846,
+          "mae_units": 3.0447,
+          "mase": 0.7356,
+          "mase_valid_series": 450,
+          "wape_nonstockout_pct": 26.6949
+        }
+      }
+    }
+  ],
+  "backtest_summary": {
+    "seasonal_naive_7": {
+      "wape_pct": 40.9586,
+      "bias_pct": -3.1655
+    },
+    "moving_average_28": {
+      "wape_pct": 30.1066,
+      "bias_pct": -3.6837
+    },
+    "lightgbm_global": {
+      "wape_pct": 29.1097,
+      "bias_pct": 0.2118
+    }
+  },
+  "prediction_intervals": {
+    "nominal_coverage_pct": 90,
+    "method": "Past-only scale-normalized absolute rolling-origin residual quantiles, separated by day and 7-day week",
+    "calibration_folds": [
+      1,
+      2,
+      3
+    ],
+    "validation_fold": 4,
+    "observations_per_horizon": 1350,
+    "daily_quantiles": [
+      0.89530055,
+      0.98632464,
+      0.94503145,
+      0.92869557,
+      0.89020134,
+      0.94444011,
+      0.83459167,
+      0.87603469,
+      0.88931197,
+      0.97186272,
+      0.90975617,
+      0.97519405,
+      0.89877443,
+      0.97258354,
+      0.88951671,
+      0.98264268,
+      0.95791902,
+      0.93864977,
+      0.98883165,
+      0.97312703,
+      0.89973066,
+      0.97999436,
+      0.96112994,
+      0.956428,
+      0.99995856,
+      0.9411419,
+      0.9443145,
+      0.96741516
+    ],
+    "weekly_quantiles": [
+      0.4240011,
+      0.41944127,
+      0.44384826,
+      0.44414217
+    ],
+    "validation_coverage": {
+      "daily": {
+        "observations": 12600,
+        "coverage_pct": 89.74,
+        "mean_width_units": 18.887,
+        "nonstockout_observations": 12287,
+        "nonstockout_coverage_pct": 90.98,
+        "unit": "daily units"
+      },
+      "weekly": {
+        "observations": 1800,
+        "coverage_pct": 89.78,
+        "mean_width_units": 61.022,
+        "nonstockout_observations": 1661,
+        "nonstockout_coverage_pct": 91.15,
+        "unit": "weekly total"
+      }
+    },
+    "untouched_test_coverage": {
+      "daily": {
+        "observations": 12600,
+        "coverage_pct": 84.47,
+        "mean_width_units": 19.872,
+        "nonstockout_observations": 11711,
+        "nonstockout_coverage_pct": 88.67,
+        "unit": "daily units"
+      },
+      "weekly": {
+        "observations": 1800,
+        "coverage_pct": 84.22,
+        "mean_width_units": 64.122,
+        "nonstockout_observations": 1408,
+        "nonstockout_coverage_pct": 88.64,
+        "unit": "weekly total"
+      }
+    },
+    "notes": "Nominal marginal intervals for observed sales, not guaranteed SKU-specific coverage or latent demand coverage during stockouts. Model selection used all rolling folds; calibration estimates may be selection-dependent. Final holdout was not used for quantile fitting."
+  },
+  "untouched_test": {
+    "train_through": "2026-10-30",
+    "test_start": "2026-10-31",
+    "test_end": "2026-11-27",
+    "metrics": {
+      "seasonal_naive_7": {
+        "observations": 12600,
+        "wape_pct": 41.8226,
+        "bias_pct": -8.8814,
+        "mae_units": 4.9833,
+        "mase": 1.183,
+        "mase_valid_series": 450,
+        "wape_nonstockout_pct": 37.7211
+      },
+      "moving_average_28": {
+        "observations": 12600,
+        "wape_pct": 31.9494,
+        "bias_pct": -11.198,
+        "mae_units": 3.8069,
+        "mase": 0.9025,
+        "mase_valid_series": 450,
+        "wape_nonstockout_pct": 28.0863
+      },
+      "lightgbm_global": {
+        "observations": 12600,
+        "wape_pct": 30.723,
+        "bias_pct": 2.021,
+        "mae_units": 3.6608,
+        "mase": 0.8908,
+        "mase_valid_series": 450,
+        "wape_nonstockout_pct": 26.1372
+      }
+    }
+  },
+  "future": {
+    "cutoff": "2026-11-27",
+    "forecast_start": "2026-11-28",
+    "forecast_end": "2026-12-25"
+  },
+  "methodology": {
+    "target": "Observed units sold; zero-ending-stock days can censor actual demand",
+    "training": "One global LightGBM regressor over SKU-warehouse series with past-only lagged demand",
+    "prediction": "Recursive multi-step: future lags are previous predictions, never actual future sales",
+    "promotions": "Synthetic promotions table treated as an advance-published plan at every cutoff; this data lacks announcement timestamps. Historical outcomes are not used as future features.",
+    "cutoffs": "Four expanding-origin 28-day rolling backtests plus separately scored final holdout",
+    "selection": "Candidate chosen using rolling folds alone; final holdout is descriptive, not used for selection",
+    "metadata": "Only product catalog, SKU, warehouse, known date and planned promotions; no latent ground truth, future stock, future sales, or test labels in features",
+    "intervals": "90% nominal scaled residual bands calibrated using folds 1..N-1; last rolling fold and untouched holdout scored separately. Weekly totals calibrated directly (not summed daily bounds).",
+    "scope": "Synthetic portfolio benchmark, not a claim of production retailer forecast accuracy"
+  },
+  "model_artifact_sha256": "ae6e98423dd130e9567fa192147f6c14fea0cc9ab4c699b08669bc0dbb085a95",
+  "model_artifact_path": "F:\\Github\\Pet-Demand-Forecasting\\models\\lightgbm_global_v1.joblib"
+}
